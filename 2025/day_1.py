@@ -42,10 +42,28 @@ class Dial:
         positions.append(current_position)
 
         self.positions = positions
-        self.current = start
+        self.current = self.positions[start]
+
+    def turnLeft(self):
+        self.current = self.current.prev
+
+    def turnRight(self):
+        self.current = self.current.next
 
     def turn(self, rotation: str):
-        #apply rotation on self.current
+        direction = rotation[0]
+        distance = int(rotation[1:])
+
+        if direction == "L":
+            for _ in range(distance):
+                self.turnLeft()
+
+        if direction == "R":
+            for _ in range(distance):
+                self.turnRight()
+
+    def isPointingAtZero(self):
+        return self.current.position == 0
 
 def main():
     password = 0
@@ -54,6 +72,11 @@ def main():
     with open("day_1_input.txt", mode="r", encoding="utf-8") as file:
         for line in file:
             rotation = line.strip()
+            dial.turn(rotation)
+            if dial.isPointingAtZero():
+                password += 1
+
+    print(password)
 
 
 main()
